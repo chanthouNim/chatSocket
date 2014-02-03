@@ -85,12 +85,10 @@ class Server {
 					} else {
 						$this->connect($acceptedSocket);
 					}
-					break;
 				} else {
-						// $this->console("Finding the socket that associated to the client...");
 					$client = $this->getClientBySocket($socket);
 					if($client) {
-						// $this->console("Receiving data from the client");
+
 
 						$data=null;
 						while($bytes = @socket_recv($socket, $r_data, 2048, MSG_DONTWAIT)) {
@@ -120,7 +118,6 @@ class Server {
 		$client = new Client(uniqid(), $socket);
 		$this->clients[] = $client;
 		$this->sockets[] = $socket;
-			// var_dump($this->sockets);
 	}
 
 	/**
@@ -131,7 +128,6 @@ class Server {
 	private function getClientBySocket($socket) {
 		foreach($this->clients as $client) {
 			if($client->getSocket() == $socket) {
-				//$this->console("Client found");
 				return $client;
 			}
 		}
@@ -154,23 +150,9 @@ class Server {
 
 		//$this->console("Client WebSocket version is {$version}, (required: 13)");
 		if($version == 13) {
-			// Extract header variables
-			//$this->console("Getting headers...");
-			/* if(preg_match("/GET (.*) HTTP/", $headers, $match))
-				$root = $match[1];
-			if(preg_match("/Host: (.*)\r\n/", $headers, $match))
-				$host = $match[1];
-			if(preg_match("/Origin: (.*)\r\n/", $headers, $match))
-				$origin = $match[1]; */
 			if(preg_match("/Sec-WebSocket-Key: (.*)\r\n/", $headers, $match)) {
 				$key = $match[1];
 			}
-			/*$this->console("Client headers are:");
-			$this->console("\t- Root: ".$root);
-			$this->console("\t- Host: ".$host);
-			$this->console("\t- Origin: ".$origin);
-			$this->console("\t- Sec-WebSocket-Key: ".$key);
-			*/
 
 			//$this->console("Generating Sec-WebSocket-Accept key...");
 			$acceptKey = $key.'258EAFA5-E914-47DA-95CA-C5AB0DC85B11';
